@@ -27,8 +27,13 @@ import { UsersModule } from './users/users.module';
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
         synchronize: configService.get('NODE_ENV') === 'development',
         logging: configService.get('NODE_ENV') === 'development',
-        ssl: {
-          rejectUnauthorized: false,
+
+        // CORRECTION DE LA CONFIGURATION SSL
+        ssl: true, // ← Ajouter cette ligne
+        extra: {
+          ssl: {
+            rejectUnauthorized: false, // ← Déplacer cette ligne dans 'extra'
+          },
         },
       }),
     }),
