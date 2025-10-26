@@ -30,13 +30,23 @@ async function bootstrap() {
   // Exposer la documentation
   SwaggerModule.setup('api/docs', app, document);
 
-  // Sauvegarder le JSON OpenAPI dans un fichier
-  fs.writeFileSync('./swagger-spec.json', JSON.stringify(document, null, 2));
+  // CORRECTION : Sauvegarder le JSON OpenAPI uniquement en développement
+  if (process.env.NODE_ENV === 'development') {
+    try {
+      fs.writeFileSync(
+        './swagger-spec.json',
+        JSON.stringify(document, null, 2),
+      );
+      console.log('💾 JSON file saved: ./swagger-spec.json');
+    } catch (error) {
+      console.log('⚠️ Cannot write swagger file, skipping...', error);
+    }
+  }
 
-  await app.listen(3001);
-  console.log('🚀 Server: http://localhost:3001');
-  console.log('📚 Swagger UI: http://localhost:3001/api/docs');
-  console.log('📄 OpenAPI JSON: http://localhost:3001/api/docs-json');
-  console.log('💾 JSON file saved: ./swagger-spec.json');
+  const port = process.env.PORT || 3001;
+  await app.listen(port);
+  console.log(`🚀 Server: http://localhost:${port}`);
+  console.log(`📚 Swagger UI: http://localhost:${port}/api/docs`);
+  console.log(`📄 OpenAPI JSON: http://localhost:${port}/api/docs-json`);
 }
 bootstrap();
