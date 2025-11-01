@@ -1,8 +1,8 @@
 import {
+  BadRequestException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
-  ForbiddenException,
-  BadRequestException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -10,8 +10,8 @@ import { Lesson, LessonStatus } from '../entities/lesson.entity';
 import { LessonModule } from '../entities/lesson-module.entity';
 import { LessonContent } from '../entities/lesson-content.entity';
 import {
-  LessonEnrollment,
   EnrollmentStatus,
+  LessonEnrollment,
 } from '../entities/lesson-enrollment.entity';
 import { LessonProgress } from '../entities/lesson-progress.entity';
 import { Payment, PaymentStatus } from '../entities/payment.entity';
@@ -98,6 +98,14 @@ export class LessonsService {
     return lessons;
   }
 
+  async getAllLessonsDispo(): Promise<Lesson[]> {
+    return await this.lessonRepository.find({
+      where: { status: LessonStatus.PUBLISHED },
+      relations: ['instructor', 'modules'],
+      order: { createdAt: 'DESC' },
+    });
+  }
+
   async getLessonById(lessonId: number, userId?: number): Promise<Lesson> {
     const lesson = await this.lessonRepository.findOne({
       where: { id: lessonId },
@@ -152,9 +160,7 @@ export class LessonsService {
     }
 
     if (lesson.instructorId !== instructorId) {
-      throw new ForbiddenException(
-        'Vous ne pouvez pas modifier cette leçon',
-      );
+      throw new ForbiddenException('Vous ne pouvez pas modifier cette leçon');
     }
 
     Object.assign(lesson, updateLessonDto);
@@ -171,9 +177,7 @@ export class LessonsService {
     }
 
     if (lesson.instructorId !== instructorId) {
-      throw new ForbiddenException(
-        'Vous ne pouvez pas publier cette leçon',
-      );
+      throw new ForbiddenException('Vous ne pouvez pas publier cette leçon');
     }
 
     lesson.status = LessonStatus.PUBLISHED;
@@ -190,9 +194,7 @@ export class LessonsService {
     }
 
     if (lesson.instructorId !== instructorId) {
-      throw new ForbiddenException(
-        'Vous ne pouvez pas supprimer cette leçon',
-      );
+      throw new ForbiddenException('Vous ne pouvez pas supprimer cette leçon');
     }
 
     await this.lessonRepository.remove(lesson);
@@ -257,10 +259,7 @@ export class LessonsService {
     return await this.contentRepository.save(content);
   }
 
-  async getContent(
-    contentId: number,
-    userId: number,
-  ): Promise<LessonContent> {
+  async getContent(contentId: number, userId: number): Promise<LessonContent> {
     const content = await this.contentRepository.findOne({
       where: { id: contentId },
       relations: ['module', 'module.lesson'],
@@ -454,7 +453,9 @@ export class LessonsService {
     }
 
     const progressPercentage =
-      totalContents > 0 ? Math.round((completedContents / totalContents) * 100) : 0;
+      totalContents > 0
+        ? Math.round((completedContents / totalContents) * 100)
+        : 0;
 
     const enrollment = await this.enrollmentRepository.findOne({
       where: { userId, lessonId },

@@ -45,6 +45,17 @@ export class LessonsController {
     return await this.lessonsService.getAllLessons(userId);
   }
 
+  @Get('published')
+  @ApiOperation({ summary: 'Obtenir toutes les leçons' })
+  @ApiResponse({
+    status: 200,
+    description: 'Liste des leçons disponibles',
+    type: [LessonResponseDto],
+  })
+  async getAllPublishedLessons() {
+    return this.lessonsService.getAllLessonsDispo();
+  }
+
   @Get(':id')
   @ApiOperation({ summary: 'Obtenir une leçon par ID' })
   @ApiParam({ name: 'id', description: 'ID de la leçon' })

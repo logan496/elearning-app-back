@@ -671,6 +671,31 @@
         ]
       }
     },
+    "/api/lessons/published": {
+      "get": {
+        "operationId": "LessonsController_getAllPublishedLessons",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Liste des leçons disponibles",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LessonResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "Obtenir toutes les leçons",
+        "tags": [
+          "Lessons"
+        ]
+      }
+    },
     "/api/lessons/{id}": {
       "get": {
         "operationId": "LessonsController_getLessonById",
