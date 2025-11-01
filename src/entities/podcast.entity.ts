@@ -33,7 +33,7 @@ export class Podcast {
   @CreateDateColumn()
   createdAt: Date;
 
-  @ManyToOne(() => User, user => user.podcasts)
+  @ManyToOne(() => User, (user) => user.podcasts)
   publisher: User;
 
   @Column()

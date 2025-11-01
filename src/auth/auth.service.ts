@@ -34,7 +34,6 @@ export class AuthService {
 
     await this.userRepository.save(user);
 
-    // Remove the options parameter - they're already set in JwtModule configuration
     const access_token = this.jwtService.sign({
       id: user.id,
       email: user.email,
@@ -48,6 +47,7 @@ export class AuthService {
         email: user.email,
         avatar: user.avatar,
         isPublisher: user.isPublisher,
+        isAdmin: user.isAdmin, // ✅ Ajouté
       },
     };
   }
@@ -59,7 +59,6 @@ export class AuthService {
       throw new BadRequestException('Email ou mot de passe incorrect');
     }
 
-    // Remove the options parameter - they're already set in JwtModule configuration
     const access_token = this.jwtService.sign({
       id: user.id,
       email: user.email,
@@ -73,6 +72,7 @@ export class AuthService {
         email: user.email,
         avatar: user.avatar,
         isPublisher: user.isPublisher,
+        isAdmin: user.isAdmin, // ✅ Déjà présent
       },
     };
   }

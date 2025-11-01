@@ -23,5 +23,6 @@ export class AuthResponseDto {
     email: string;
     avatar: string;
     isPublisher: boolean;
+    isAdmin: boolean;
   };
 }

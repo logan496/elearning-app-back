@@ -7,11 +7,7 @@ import { JwtStrategy } from './jwt-strategy';
 import { User } from '../entities/user.entity';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([User]),
-    PassportModule,
-    // Remove JwtModule.register() here - it's already globally configured in AppModule
-  ],
+  imports: [TypeOrmModule.forFeature([User]), PassportModule],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],
   exports: [AuthService],

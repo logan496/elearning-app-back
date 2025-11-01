@@ -608,6 +608,1739 @@
           "Users"
         ]
       }
+    },
+    "/api/lessons": {
+      "get": {
+        "operationId": "LessonsController_getAllLessons",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des leçons",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LessonResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "Obtenir toutes les leçons publiées",
+        "tags": [
+          "Lessons"
+        ]
+      },
+      "post": {
+        "operationId": "LessonsController_createLesson",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateLessonDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Leçon créée"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Créer une nouvelle leçon (instructeur)",
+        "tags": [
+          "Lessons"
+        ]
+      }
+    },
+    "/api/lessons/{id}": {
+      "get": {
+        "operationId": "LessonsController_getLessonById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID de la leçon",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "userId",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Détails de la leçon",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LessonResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Obtenir une leçon par ID",
+        "tags": [
+          "Lessons"
+        ]
+      },
+      "put": {
+        "operationId": "LessonsController_updateLesson",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID de la leçon",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateLessonDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Leçon mise à jour"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Mettre à jour une leçon",
+        "tags": [
+          "Lessons"
+        ]
+      },
+      "delete": {
+        "operationId": "LessonsController_deleteLesson",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID de la leçon",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Leçon supprimée"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Supprimer une leçon",
+        "tags": [
+          "Lessons"
+        ]
+      }
+    },
+    "/api/lessons/my/created": {
+      "get": {
+        "operationId": "LessonsController_getMyLessons",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Liste des leçons créées"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Obtenir mes leçons créées",
+        "tags": [
+          "Lessons"
+        ]
+      }
+    },
+    "/api/lessons/{id}/publish": {
+      "post": {
+        "operationId": "LessonsController_publishLesson",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID de la leçon",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Leçon publiée"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Publier une leçon",
+        "tags": [
+          "Lessons"
+        ]
+      }
+    },
+    "/api/lessons/{lessonId}/modules": {
+      "post": {
+        "operationId": "LessonsController_createModule",
+        "parameters": [
+          {
+            "name": "lessonId",
+            "required": true,
+            "in": "path",
+            "description": "ID de la leçon",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateModuleDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Module créé"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Ajouter un module à une leçon",
+        "tags": [
+          "Lessons"
+        ]
+      }
+    },
+    "/api/lessons/modules/{moduleId}/contents": {
+      "post": {
+        "operationId": "LessonsController_createContent",
+        "parameters": [
+          {
+            "name": "moduleId",
+            "required": true,
+            "in": "path",
+            "description": "ID du module",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateContentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Contenu créé"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Ajouter du contenu à un module",
+        "tags": [
+          "Lessons"
+        ]
+      }
+    },
+    "/api/lessons/contents/{contentId}": {
+      "get": {
+        "operationId": "LessonsController_getContent",
+        "parameters": [
+          {
+            "name": "contentId",
+            "required": true,
+            "in": "path",
+            "description": "ID du contenu",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Contenu"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Obtenir un contenu spécifique",
+        "tags": [
+          "Lessons"
+        ]
+      }
+    },
+    "/api/lessons/enroll": {
+      "post": {
+        "operationId": "LessonsController_enrollLesson",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EnrollLessonDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Inscription réussie"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "S'inscrire à une leçon",
+        "tags": [
+          "Lessons"
+        ]
+      }
+    },
+    "/api/lessons/my/enrollments": {
+      "get": {
+        "operationId": "LessonsController_getMyEnrollments",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Liste des inscriptions"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Obtenir mes inscriptions",
+        "tags": [
+          "Lessons"
+        ]
+      }
+    },
+    "/api/lessons/progress": {
+      "post": {
+        "operationId": "LessonsController_updateProgress",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProgressDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Progression mise à jour"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Mettre à jour la progression",
+        "tags": [
+          "Lessons"
+        ]
+      }
+    },
+    "/api/lessons/{lessonId}/progress": {
+      "get": {
+        "operationId": "LessonsController_getLessonProgress",
+        "parameters": [
+          {
+            "name": "lessonId",
+            "required": true,
+            "in": "path",
+            "description": "ID de la leçon",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Progression"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Obtenir la progression dans une leçon",
+        "tags": [
+          "Lessons"
+        ]
+      }
+    },
+    "/api/blog/posts": {
+      "get": {
+        "operationId": "BlogController_getAllPosts",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "category",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tag",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Obtenir tous les articles publiés",
+        "tags": [
+          "Blog"
+        ]
+      },
+      "post": {
+        "operationId": "BlogController_createPost",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePostDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Créer un article",
+        "tags": [
+          "Blog"
+        ]
+      }
+    },
+    "/api/blog/posts/popular": {
+      "get": {
+        "operationId": "BlogController_getPopularPosts",
+        "parameters": [
+          {
+            "name": "limit",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Obtenir les articles populaires",
+        "tags": [
+          "Blog"
+        ]
+      }
+    },
+    "/api/blog/posts/search": {
+      "get": {
+        "operationId": "BlogController_searchPosts",
+        "parameters": [
+          {
+            "name": "q",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Rechercher des articles",
+        "tags": [
+          "Blog"
+        ]
+      }
+    },
+    "/api/blog/posts/category/{category}": {
+      "get": {
+        "operationId": "BlogController_getPostsByCategory",
+        "parameters": [
+          {
+            "name": "category",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Obtenir les articles par catégorie",
+        "tags": [
+          "Blog"
+        ]
+      }
+    },
+    "/api/blog/posts/{slug}": {
+      "get": {
+        "operationId": "BlogController_getPostBySlug",
+        "parameters": [
+          {
+            "name": "slug",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "userId",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Obtenir un article par slug",
+        "tags": [
+          "Blog"
+        ]
+      }
+    },
+    "/api/blog/my/posts": {
+      "get": {
+        "operationId": "BlogController_getMyPosts",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Obtenir mes articles",
+        "tags": [
+          "Blog"
+        ]
+      }
+    },
+    "/api/blog/posts/{id}": {
+      "put": {
+        "operationId": "BlogController_updatePost",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePostDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Mettre à jour un article",
+        "tags": [
+          "Blog"
+        ]
+      },
+      "delete": {
+        "operationId": "BlogController_deletePost",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Supprimer un article",
+        "tags": [
+          "Blog"
+        ]
+      }
+    },
+    "/api/blog/posts/{id}/publish": {
+      "post": {
+        "operationId": "BlogController_publishPost",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Publier un article",
+        "tags": [
+          "Blog"
+        ]
+      }
+    },
+    "/api/blog/posts/{postId}/comments": {
+      "post": {
+        "operationId": "BlogController_addComment",
+        "parameters": [
+          {
+            "name": "postId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCommentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Ajouter un commentaire",
+        "tags": [
+          "Blog"
+        ]
+      }
+    },
+    "/api/blog/comments/{id}": {
+      "put": {
+        "operationId": "BlogController_updateComment",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Modifier un commentaire",
+        "tags": [
+          "Blog"
+        ]
+      },
+      "delete": {
+        "operationId": "BlogController_deleteComment",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Supprimer un commentaire",
+        "tags": [
+          "Blog"
+        ]
+      }
+    },
+    "/api/blog/posts/{postId}/like": {
+      "post": {
+        "operationId": "BlogController_toggleLike",
+        "parameters": [
+          {
+            "name": "postId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Liker/Unliker un article",
+        "tags": [
+          "Blog"
+        ]
+      }
+    },
+    "/api/jobs": {
+      "get": {
+        "operationId": "ApplicationsController_getAllJobPostings",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "jobType",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "location",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "isRemote",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Obtenir toutes les offres ouvertes",
+        "tags": [
+          "Job Applications"
+        ]
+      },
+      "post": {
+        "operationId": "ApplicationsController_createJobPosting",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateJobPostingDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Créer une offre d'emploi",
+        "tags": [
+          "Job Applications"
+        ]
+      }
+    },
+    "/api/jobs/search": {
+      "get": {
+        "operationId": "ApplicationsController_searchJobs",
+        "parameters": [
+          {
+            "name": "q",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Rechercher des offres",
+        "tags": [
+          "Job Applications"
+        ]
+      }
+    },
+    "/api/jobs/{slug}": {
+      "get": {
+        "operationId": "ApplicationsController_getJobBySlug",
+        "parameters": [
+          {
+            "name": "slug",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "userId",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Obtenir une offre par slug",
+        "tags": [
+          "Job Applications"
+        ]
+      }
+    },
+    "/api/jobs/my/postings": {
+      "get": {
+        "operationId": "ApplicationsController_getMyJobPostings",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Obtenir mes offres postées",
+        "tags": [
+          "Job Applications"
+        ]
+      }
+    },
+    "/api/jobs/{id}": {
+      "put": {
+        "operationId": "ApplicationsController_updateJobPosting",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateJobPostingDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Mettre à jour une offre",
+        "tags": [
+          "Job Applications"
+        ]
+      },
+      "delete": {
+        "operationId": "ApplicationsController_deleteJobPosting",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Supprimer une offre",
+        "tags": [
+          "Job Applications"
+        ]
+      }
+    },
+    "/api/jobs/{id}/publish": {
+      "post": {
+        "operationId": "ApplicationsController_publishJobPosting",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Publier une offre",
+        "tags": [
+          "Job Applications"
+        ]
+      }
+    },
+    "/api/jobs/{id}/close": {
+      "post": {
+        "operationId": "ApplicationsController_closeJobPosting",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Fermer une offre",
+        "tags": [
+          "Job Applications"
+        ]
+      }
+    },
+    "/api/jobs/{jobId}/apply": {
+      "post": {
+        "operationId": "ApplicationsController_applyToJob",
+        "parameters": [
+          {
+            "name": "jobId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateApplicationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Postuler à une offre",
+        "tags": [
+          "Job Applications"
+        ]
+      }
+    },
+    "/api/jobs/my/applications": {
+      "get": {
+        "operationId": "ApplicationsController_getMyApplications",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Obtenir mes candidatures",
+        "tags": [
+          "Job Applications"
+        ]
+      }
+    },
+    "/api/jobs/{jobId}/applications": {
+      "get": {
+        "operationId": "ApplicationsController_getJobApplications",
+        "parameters": [
+          {
+            "name": "jobId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Obtenir les candidatures d'une offre (recruteur)",
+        "tags": [
+          "Job Applications"
+        ]
+      }
+    },
+    "/api/jobs/applications/{id}/status": {
+      "put": {
+        "operationId": "ApplicationsController_updateApplicationStatus",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateApplicationStatusDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Mettre à jour le statut d'une candidature (recruteur)",
+        "tags": [
+          "Job Applications"
+        ]
+      }
+    },
+    "/api/jobs/applications/{id}/withdraw": {
+      "post": {
+        "operationId": "ApplicationsController_withdrawApplication",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Retirer sa candidature",
+        "tags": [
+          "Job Applications"
+        ]
+      }
+    },
+    "/api/jobs/{jobId}/statistics": {
+      "get": {
+        "operationId": "ApplicationsController_getJobStatistics",
+        "parameters": [
+          {
+            "name": "jobId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Obtenir les statistiques d'une offre (recruteur)",
+        "tags": [
+          "Job Applications"
+        ]
+      }
+    },
+    "/api/admin/dashboard": {
+      "get": {
+        "operationId": "AdminController_getDashboardStats",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Obtenir les statistiques du dashboard",
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/api/admin/users": {
+      "get": {
+        "operationId": "AdminController_getAllUsers",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Obtenir tous les utilisateurs",
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/api/admin/users/{id}": {
+      "get": {
+        "operationId": "AdminController_getUserById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Obtenir un utilisateur par ID",
+        "tags": [
+          "Admin"
+        ]
+      },
+      "delete": {
+        "operationId": "AdminController_deleteUser",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Supprimer un utilisateur",
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/api/admin/users/{id}/admin": {
+      "put": {
+        "operationId": "AdminController_makeUserAdmin",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserRoleDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Promouvoir/Rétrograder un utilisateur admin",
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/api/admin/users/{id}/publisher": {
+      "put": {
+        "operationId": "AdminController_updatePublisherStatus",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePublisherStatusDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Activer/Désactiver le statut publisher",
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/api/admin/applications": {
+      "get": {
+        "operationId": "AdminController_getAllApplications",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Obtenir toutes les candidatures",
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/api/admin/applications/{id}/approve": {
+      "put": {
+        "operationId": "AdminController_approveApplication",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApproveApplicationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Approuver/Modifier le statut d'une candidature",
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/api/admin/lessons": {
+      "get": {
+        "operationId": "AdminController_getAllLessons",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Obtenir toutes les leçons",
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/api/admin/lessons/{id}": {
+      "delete": {
+        "operationId": "AdminController_deleteLesson",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Supprimer une leçon",
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/api/admin/blog-posts": {
+      "get": {
+        "operationId": "AdminController_getAllBlogPosts",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Obtenir tous les articles de blog",
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/api/admin/blog-posts/{id}": {
+      "delete": {
+        "operationId": "AdminController_deleteBlogPost",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Supprimer un article de blog",
+        "tags": [
+          "Admin"
+        ]
+      }
     }
   },
   "info": {
@@ -921,6 +2654,623 @@
             "description": "Statut publisher"
           }
         }
+      },
+      "InstructorDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "username": {
+            "type": "string"
+          },
+          "avatar": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "username",
+          "avatar"
+        ]
+      },
+      "LessonResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "thumbnail": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "isFree": {
+            "type": "boolean"
+          },
+          "level": {
+            "type": "string",
+            "enum": [
+              "beginner",
+              "intermediate",
+              "advanced"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "published",
+              "archived"
+            ]
+          },
+          "duration": {
+            "type": "number"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "enrollmentCount": {
+            "type": "number"
+          },
+          "instructor": {
+            "$ref": "#/components/schemas/InstructorDto"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "isEnrolled": {
+            "type": "boolean"
+          },
+          "progress": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "description",
+          "thumbnail",
+          "price",
+          "isFree",
+          "level",
+          "status",
+          "duration",
+          "tags",
+          "enrollmentCount",
+          "instructor",
+          "createdAt",
+          "isEnrolled",
+          "progress"
+        ]
+      },
+      "CreateLessonDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "Introduction à JavaScript"
+          },
+          "description": {
+            "type": "string",
+            "example": "Apprenez les bases de JavaScript"
+          },
+          "thumbnail": {
+            "type": "string",
+            "example": "https://example.com/thumbnail.jpg"
+          },
+          "price": {
+            "type": "number",
+            "example": 29.99
+          },
+          "isFree": {
+            "type": "boolean",
+            "example": false
+          },
+          "level": {
+            "type": "string",
+            "enum": [
+              "beginner",
+              "intermediate",
+              "advanced"
+            ],
+            "example": "beginner"
+          },
+          "duration": {
+            "type": "number",
+            "example": 120
+          },
+          "tags": {
+            "example": [
+              "javascript",
+              "programming"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "title",
+          "description",
+          "price",
+          "isFree",
+          "level",
+          "duration"
+        ]
+      },
+      "UpdateLessonDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "Introduction à JavaScript"
+          },
+          "description": {
+            "type": "string",
+            "example": "Apprenez les bases de JavaScript"
+          },
+          "thumbnail": {
+            "type": "string",
+            "example": "https://example.com/thumbnail.jpg"
+          },
+          "price": {
+            "type": "number",
+            "example": 29.99
+          },
+          "isFree": {
+            "type": "boolean",
+            "example": false
+          },
+          "level": {
+            "type": "string",
+            "enum": [
+              "beginner",
+              "intermediate",
+              "advanced"
+            ],
+            "example": "beginner"
+          },
+          "duration": {
+            "type": "number",
+            "example": 120
+          },
+          "tags": {
+            "example": [
+              "javascript",
+              "programming"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "CreateModuleDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "Module 1: Les bases"
+          },
+          "description": {
+            "type": "string",
+            "example": "Introduction aux concepts de base"
+          },
+          "order": {
+            "type": "number",
+            "example": 1
+          }
+        },
+        "required": [
+          "title",
+          "order"
+        ]
+      },
+      "CreateContentDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "Introduction"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "video",
+              "text",
+              "quiz",
+              "document"
+            ],
+            "example": "video"
+          },
+          "content": {
+            "type": "string",
+            "example": "https://example.com/video.mp4"
+          },
+          "duration": {
+            "type": "number",
+            "example": 15
+          },
+          "order": {
+            "type": "number",
+            "example": 1
+          },
+          "isFreePreview": {
+            "type": "boolean",
+            "example": false
+          }
+        },
+        "required": [
+          "title",
+          "type",
+          "content",
+          "duration",
+          "order",
+          "isFreePreview"
+        ]
+      },
+      "EnrollLessonDto": {
+        "type": "object",
+        "properties": {
+          "lessonId": {
+            "type": "number",
+            "example": 1
+          },
+          "paymentMethod": {
+            "type": "string",
+            "enum": [
+              "stripe",
+              "paypal",
+              "mobile_money",
+              "bank_transfer"
+            ],
+            "example": "stripe"
+          }
+        },
+        "required": [
+          "lessonId",
+          "paymentMethod"
+        ]
+      },
+      "UpdateProgressDto": {
+        "type": "object",
+        "properties": {
+          "contentId": {
+            "type": "number",
+            "example": 1
+          },
+          "isCompleted": {
+            "type": "boolean",
+            "example": true
+          },
+          "timeSpent": {
+            "type": "number",
+            "example": 120
+          }
+        },
+        "required": [
+          "contentId",
+          "isCompleted",
+          "timeSpent"
+        ]
+      },
+      "CreatePostDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "Introduction à TypeScript"
+          },
+          "excerpt": {
+            "type": "string",
+            "example": "Un aperçu rapide de TypeScript"
+          },
+          "content": {
+            "type": "string",
+            "example": "Contenu complet du post..."
+          },
+          "featuredImage": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "technology",
+              "design",
+              "business",
+              "marketing",
+              "programming",
+              "tutorial",
+              "news",
+              "other"
+            ],
+            "example": "programming"
+          },
+          "tags": {
+            "example": [
+              "typescript",
+              "javascript"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "commentsEnabled": {
+            "type": "boolean",
+            "example": true
+          }
+        },
+        "required": [
+          "title",
+          "excerpt",
+          "content",
+          "category",
+          "commentsEnabled"
+        ]
+      },
+      "UpdatePostDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "CreateCommentDto": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "example": "Super article !"
+          },
+          "parentId": {
+            "type": "number",
+            "example": 1
+          }
+        },
+        "required": [
+          "content"
+        ]
+      },
+      "CreateJobPostingDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "Développeur Full Stack"
+          },
+          "description": {
+            "type": "string",
+            "example": "Nous recherchons un développeur..."
+          },
+          "requirements": {
+            "type": "string",
+            "example": "Maîtrise de React, Node.js..."
+          },
+          "responsibilities": {
+            "type": "string"
+          },
+          "benefits": {
+            "type": "string"
+          },
+          "company": {
+            "type": "string",
+            "example": "Tech Corp"
+          },
+          "companyLogo": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string",
+            "example": "Paris, France"
+          },
+          "isRemote": {
+            "type": "boolean",
+            "example": true
+          },
+          "jobType": {
+            "type": "string",
+            "enum": [
+              "full_time",
+              "part_time",
+              "contract",
+              "internship",
+              "freelance"
+            ],
+            "example": "full_time"
+          },
+          "experienceLevel": {
+            "type": "string",
+            "enum": [
+              "entry",
+              "junior",
+              "mid",
+              "senior",
+              "lead"
+            ],
+            "example": "mid"
+          },
+          "salaryMin": {
+            "type": "number",
+            "example": 40000
+          },
+          "salaryMax": {
+            "type": "number",
+            "example": 60000
+          },
+          "salaryCurrency": {
+            "type": "string",
+            "example": "EUR"
+          },
+          "skills": {
+            "example": [
+              "React",
+              "Node.js",
+              "TypeScript"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "deadline": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "open",
+              "closed",
+              "archived"
+            ],
+            "example": "open",
+            "default": "open",
+            "description": "Statut de l'offre (par défaut: OPEN)"
+          }
+        },
+        "required": [
+          "title",
+          "description",
+          "requirements",
+          "company",
+          "location",
+          "isRemote",
+          "jobType",
+          "experienceLevel"
+        ]
+      },
+      "UpdateJobPostingDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "open",
+              "closed",
+              "archived"
+            ],
+            "description": "Statut de l'offre"
+          }
+        }
+      },
+      "CreateApplicationDto": {
+        "type": "object",
+        "properties": {
+          "coverLetter": {
+            "type": "string",
+            "example": "Je suis très intéressé par ce poste..."
+          },
+          "resumeUrl": {
+            "type": "string",
+            "example": "https://example.com/resume.pdf"
+          },
+          "portfolioUrl": {
+            "type": "string",
+            "example": "https://portfolio.com"
+          },
+          "phone": {
+            "type": "string",
+            "example": "+33612345678"
+          },
+          "linkedinUrl": {
+            "type": "string",
+            "example": "https://linkedin.com/in/..."
+          },
+          "githubUrl": {
+            "type": "string",
+            "example": "https://github.com/..."
+          }
+        },
+        "required": [
+          "coverLetter"
+        ]
+      },
+      "UpdateApplicationStatusDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "reviewing",
+              "shortlisted",
+              "interview",
+              "accepted",
+              "rejected",
+              "withdrawn"
+            ]
+          },
+          "notes": {
+            "type": "string"
+          },
+          "feedback": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "UpdateUserRoleDto": {
+        "type": "object",
+        "properties": {
+          "isAdmin": {
+            "type": "boolean",
+            "example": true
+          }
+        },
+        "required": [
+          "isAdmin"
+        ]
+      },
+      "UpdatePublisherStatusDto": {
+        "type": "object",
+        "properties": {
+          "isPublisher": {
+            "type": "boolean",
+            "example": true
+          }
+        },
+        "required": [
+          "isPublisher"
+        ]
+      },
+      "ApproveApplicationDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "reviewing",
+              "shortlisted",
+              "interview",
+              "accepted",
+              "rejected",
+              "withdrawn"
+            ]
+          },
+          "feedback": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "status"
+        ]
       }
     }
   }
