@@ -11,6 +11,7 @@ import { LessonsModule } from './lessons/lessons.module';
 import { BlogModule } from './blog/blog.module';
 import { ApplicationsModule } from './applications/applications.module';
 import { AdminModule } from './admin/admin.module';
+import { SocialModule } from './social/social.module';
 
 @Module({
   imports: [
@@ -18,56 +19,56 @@ import { AdminModule } from './admin/admin.module';
       isGlobal: true,
       envFilePath: '.env',
     }),
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
-        host: configService.get('DB_HOST'),
-        port: configService.get('DB_PORT'),
-        username: configService.get('DB_USERNAME'),
-        password: configService.get('DB_PASSWORD'),
-        database: configService.get('DB_NAME'),
-        entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: configService.get('NODE_ENV') === 'development',
-        logging: configService.get('NODE_ENV') === 'development',
-
-        // CORRECTION DE LA CONFIGURATION SSL
-        ssl: true, // ← Ajouter cette ligne
-        extra: {
-          ssl: {
-            rejectUnauthorized: false, // ← Déplacer cette ligne dans 'extra'
-          },
-        },
-      }),
-    }),
     // TypeOrmModule.forRootAsync({
     //   imports: [ConfigModule],
     //   inject: [ConfigService],
-    //   useFactory: (configService: ConfigService) => {
-    //     const isProduction = configService.get('NODE_ENV') === 'production';
+    //   useFactory: (configService: ConfigService) => ({
+    //     type: 'postgres',
+    //     host: configService.get('DB_HOST'),
+    //     port: configService.get('DB_PORT'),
+    //     username: configService.get('DB_USERNAME'),
+    //     password: configService.get('DB_PASSWORD'),
+    //     database: configService.get('DB_NAME'),
+    //     entities: [__dirname + '/**/*.entity{.ts,.js}'],
+    //     synchronize: configService.get('NODE_ENV') === 'development',
+    //     logging: configService.get('NODE_ENV') === 'development',
     //
-    //     return {
-    //       type: 'postgres',
-    //       host: configService.get('DB_HOST'),
-    //       port: configService.get('DB_PORT'),
-    //       username: configService.get('DB_USERNAME'),
-    //       password: configService.get('DB_PASSWORD'),
-    //       database: configService.get('DB_NAME'),
-    //       entities: [__dirname + '/**/*.entity{.ts,.js}'],
-    //       synchronize: !isProduction,
-    //       logging: !isProduction,
-    //       ssl: isProduction,
-    //       ...(isProduction && {
-    //         extra: {
-    //           ssl: {
-    //             rejectUnauthorized: false,
-    //           },
-    //         },
-    //       }),
-    //     };
-    //   },
+    //     // CORRECTION DE LA CONFIGURATION SSL
+    //     ssl: true, // ← Ajouter cette ligne
+    //     extra: {
+    //       ssl: {
+    //         rejectUnauthorized: false, // ← Déplacer cette ligne dans 'extra'
+    //       },
+    //     },
+    //   }),
     // }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => {
+        const isProduction = configService.get('NODE_ENV') === 'production';
+
+        return {
+          type: 'postgres',
+          host: configService.get('DB_HOST'),
+          port: configService.get('DB_PORT'),
+          username: configService.get('DB_USERNAME'),
+          password: configService.get('DB_PASSWORD'),
+          database: configService.get('DB_NAME'),
+          entities: [__dirname + '/**/*.entity{.ts,.js}'],
+          synchronize: !isProduction,
+          logging: !isProduction,
+          ssl: isProduction,
+          ...(isProduction && {
+            extra: {
+              ssl: {
+                rejectUnauthorized: false,
+              },
+            },
+          }),
+        };
+      },
+    }),
     JwtModule.registerAsync({
       global: true,
       imports: [ConfigModule],
@@ -95,6 +96,7 @@ import { AdminModule } from './admin/admin.module';
     BlogModule,
     ApplicationsModule,
     AdminModule,
+    SocialModule,
   ],
 })
 export class AppModule {}

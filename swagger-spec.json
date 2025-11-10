@@ -259,32 +259,121 @@
       }
     },
     "/api/podcasts": {
+      "get": {
+        "operationId": "PodcastController_getAllPodcasts",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "type",
+            "required": false,
+            "in": "query",
+            "description": "audio ou video",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "category",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Obtenir tous les podcasts publiés",
+        "tags": [
+          "Podcasts"
+        ]
+      },
       "post": {
         "operationId": "PodcastController_createPodcast",
         "parameters": [],
         "requestBody": {
           "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/CreatePodcastDto"
+                "type": "object",
+                "required": [
+                  "title",
+                  "description",
+                  "type",
+                  "duration",
+                  "mediaFile"
+                ],
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "example": "Episode 1"
+                  },
+                  "description": {
+                    "type": "string",
+                    "example": "Description..."
+                  },
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "audio",
+                      "video"
+                    ],
+                    "example": "audio"
+                  },
+                  "duration": {
+                    "type": "number",
+                    "example": 1800
+                  },
+                  "category": {
+                    "type": "string",
+                    "example": "Technology"
+                  },
+                  "tags": {
+                    "type": "string",
+                    "example": "tech,startup",
+                    "description": "Séparés par des virgules"
+                  },
+                  "autoShareOnPublish": {
+                    "type": "boolean",
+                    "example": true
+                  },
+                  "mediaFile": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Fichier audio (max 20MB) ou vidéo (max 50MB)"
+                  },
+                  "thumbnailFile": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Image miniature (optionnel, max 5MB)"
+                  }
+                }
               }
             }
           }
         },
         "responses": {
           "201": {
-            "description": "Podcast créé",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PodcastResponseDto"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Vous ne pouvez pas publier de podcasts"
+            "description": ""
           }
         },
         "security": [
@@ -292,30 +381,51 @@
             "JWT-auth": []
           }
         ],
-        "summary": "Créer un nouveau podcast (publishers uniquement)",
+        "summary": "Créer un podcast avec upload de fichiers",
         "tags": [
           "Podcasts"
         ]
-      },
+      }
+    },
+    "/api/podcasts/search": {
       "get": {
-        "operationId": "PodcastController_getAllPodcasts",
+        "operationId": "PodcastController_searchPodcasts",
+        "parameters": [
+          {
+            "name": "q",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Rechercher des podcasts",
+        "tags": [
+          "Podcasts"
+        ]
+      }
+    },
+    "/api/podcasts/my-podcasts": {
+      "get": {
+        "operationId": "PodcastController_getMyPodcasts",
         "parameters": [],
         "responses": {
           "200": {
-            "description": "Liste des podcasts",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/PodcastResponseDto"
-                  }
-                }
-              }
-            }
+            "description": ""
           }
         },
-        "summary": "Récupérer tous les podcasts",
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Obtenir mes podcasts",
         "tags": [
           "Podcasts"
         ]
@@ -329,7 +439,6 @@
             "name": "id",
             "required": true,
             "in": "path",
-            "description": "ID du podcast",
             "schema": {
               "type": "number"
             }
@@ -337,20 +446,83 @@
         ],
         "responses": {
           "200": {
-            "description": "Détails du podcast",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PodcastResponseDto"
+            "description": ""
+          }
+        },
+        "summary": "Obtenir un podcast par ID",
+        "tags": [
+          "Podcasts"
+        ]
+      },
+      "put": {
+        "operationId": "PodcastController_updatePodcast",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "audio",
+                      "video"
+                    ]
+                  },
+                  "duration": {
+                    "type": "number"
+                  },
+                  "category": {
+                    "type": "string"
+                  },
+                  "tags": {
+                    "type": "string",
+                    "description": "Séparés par des virgules"
+                  },
+                  "autoShareOnPublish": {
+                    "type": "boolean"
+                  },
+                  "mediaFile": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "thumbnailFile": {
+                    "type": "string",
+                    "format": "binary"
+                  }
                 }
               }
             }
-          },
-          "404": {
-            "description": "Podcast non trouvé"
           }
         },
-        "summary": "Récupérer un podcast par son ID",
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Mettre à jour un podcast",
         "tags": [
           "Podcasts"
         ]
@@ -362,7 +534,6 @@
             "name": "id",
             "required": true,
             "in": "path",
-            "description": "ID du podcast",
             "schema": {
               "type": "number"
             }
@@ -370,13 +541,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Podcast supprimé"
-          },
-          "403": {
-            "description": "Vous ne pouvez pas supprimer ce podcast"
-          },
-          "404": {
-            "description": "Podcast non trouvé"
+            "description": ""
           }
         },
         "security": [
@@ -390,33 +555,22 @@
         ]
       }
     },
-    "/api/podcasts/publisher/{publisherId}": {
-      "get": {
-        "operationId": "PodcastController_getPodcastsByPublisher",
+    "/api/podcasts/{id}/publish": {
+      "post": {
+        "operationId": "PodcastController_publishPodcast",
         "parameters": [
           {
-            "name": "publisherId",
+            "name": "id",
             "required": true,
             "in": "path",
-            "description": "ID du publisher",
             "schema": {
               "type": "number"
             }
           }
         ],
         "responses": {
-          "200": {
-            "description": "Liste des podcasts du publisher",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/PodcastResponseDto"
-                  }
-                }
-              }
-            }
+          "201": {
+            "description": ""
           }
         },
         "security": [
@@ -424,9 +578,213 @@
             "JWT-auth": []
           }
         ],
-        "summary": "Récupérer les podcasts d'un publisher",
+        "summary": "Publier un podcast",
         "tags": [
           "Podcasts"
+        ]
+      }
+    },
+    "/api/podcasts/{id}/like": {
+      "post": {
+        "operationId": "PodcastController_toggleLike",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Liker/Unliker un podcast",
+        "tags": [
+          "Podcasts"
+        ]
+      }
+    },
+    "/api/social/accounts": {
+      "get": {
+        "operationId": "SocialController_getUserSocialAccounts",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Obtenir mes comptes sociaux connectés",
+        "tags": [
+          "Social Media"
+        ]
+      }
+    },
+    "/api/social/connect": {
+      "post": {
+        "operationId": "SocialController_connectSocialAccount",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConnectSocialAccountDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Connecter un compte de réseau social",
+        "tags": [
+          "Social Media"
+        ]
+      }
+    },
+    "/api/social/disconnect/{platform}": {
+      "delete": {
+        "operationId": "SocialController_disconnectSocialAccount",
+        "parameters": [
+          {
+            "name": "platform",
+            "required": true,
+            "in": "path",
+            "description": "facebook, twitter, linkedin",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Déconnecter un compte de réseau social",
+        "tags": [
+          "Social Media"
+        ]
+      }
+    },
+    "/api/social/auth/facebook/callback": {
+      "get": {
+        "operationId": "SocialController_facebookCallback",
+        "parameters": [
+          {
+            "name": "code",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Callback OAuth Facebook",
+        "tags": [
+          "Social Media"
+        ]
+      }
+    },
+    "/api/social/auth/twitter/callback": {
+      "get": {
+        "operationId": "SocialController_twitterCallback",
+        "parameters": [
+          {
+            "name": "oauth_token",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "oauth_verifier",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Callback OAuth Twitter",
+        "tags": [
+          "Social Media"
+        ]
+      }
+    },
+    "/api/social/auth/linkedin/callback": {
+      "get": {
+        "operationId": "SocialController_linkedinCallback",
+        "parameters": [
+          {
+            "name": "code",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Callback OAuth LinkedIn",
+        "tags": [
+          "Social Media"
         ]
       }
     },
@@ -2519,97 +2877,38 @@
           "content"
         ]
       },
-      "CreatePodcastDto": {
+      "ConnectSocialAccountDto": {
         "type": "object",
         "properties": {
-          "title": {
+          "platform": {
             "type": "string",
-            "example": "Introduction à JavaScript",
-            "description": "Titre du podcast"
+            "enum": [
+              "facebook",
+              "twitter",
+              "linkedin",
+              "instagram"
+            ],
+            "example": "facebook"
           },
-          "description": {
-            "type": "string",
-            "example": "Apprenez les bases de JavaScript en 30 minutes",
-            "description": "Description du podcast"
+          "accessToken": {
+            "type": "string"
           },
-          "duration": {
-            "type": "string",
-            "example": "30 min",
-            "description": "Durée du podcast"
+          "refreshToken": {
+            "type": "string"
           },
-          "audioUrl": {
-            "type": "string",
-            "example": "https://example.com/podcasts/js-intro.mp3",
-            "description": "URL du fichier audio"
+          "expiresIn": {
+            "type": "number"
           },
-          "imageUrl": {
-            "type": "string",
-            "example": "https://example.com/images/js-podcast.jpg",
-            "description": "URL de l'image de couverture"
+          "platformUserId": {
+            "type": "string"
+          },
+          "platformUsername": {
+            "type": "string"
           }
         },
         "required": [
-          "title",
-          "description",
-          "duration",
-          "audioUrl"
-        ]
-      },
-      "PodcastResponseDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "number",
-            "example": 1
-          },
-          "title": {
-            "type": "string",
-            "example": "Introduction à JavaScript"
-          },
-          "description": {
-            "type": "string",
-            "example": "Apprenez les bases de JavaScript"
-          },
-          "duration": {
-            "type": "string",
-            "example": "30 min"
-          },
-          "audioUrl": {
-            "type": "string",
-            "example": "https://example.com/audio.mp3"
-          },
-          "imageUrl": {
-            "type": "string",
-            "example": "https://example.com/image.jpg"
-          },
-          "views": {
-            "type": "number",
-            "example": 150
-          },
-          "createdAt": {
-            "format": "date-time",
-            "type": "string",
-            "example": "2025-10-25T12:00:00.000Z"
-          },
-          "publisher": {
-            "type": "object",
-            "example": {
-              "id": 1,
-              "username": "john_doe",
-              "email": "john@example.com"
-            }
-          }
-        },
-        "required": [
-          "id",
-          "title",
-          "description",
-          "duration",
-          "audioUrl",
-          "imageUrl",
-          "views",
-          "createdAt",
-          "publisher"
+          "platform",
+          "accessToken"
         ]
       },
       "UserResponseDto": {
