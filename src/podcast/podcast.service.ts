@@ -54,10 +54,7 @@ export class PodcastService {
     const podcast = this.podcastRepository.create({
       ...createPodcastDto,
       mediaUrl,
-      thumbnailUrl:
-        thumbnailUrl || createPodcastDto.type === 'video'
-          ? mediaUrl
-          : undefined,
+      thumbnailUrl, // ✅ Correction : utiliser directement thumbnailUrl
       publisherId,
     });
 
